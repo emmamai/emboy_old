@@ -143,13 +143,13 @@ impl GbCpu {
 
 		print!("[0x{0:04X}] 0x{1:02X} 	", self.reg_pc, instruction);
 		match instruction {
-			0x00 => {
+			0x00 => { //NOP
 				self.ins_cycles = 0;
 				self.ins_max_cycles = 4;
 				self.reg_pc = self.reg_pc + 1;
 				println!("NOP");
 			}
-			0x06 => {
+			0x06 => { //LD B, d8
 				self.reg_b = mmap.peek(self.reg_pc + 2);
 				
 				self.ins_cycles = 0;
@@ -157,7 +157,7 @@ impl GbCpu {
 				self.reg_pc = self.reg_pc + 2;
 				println!("LD B, 0x{0:02X}", self.reg_h);
 			}
-			0x0E => {
+			0x0E => { //LD C, d8
 				self.reg_c = mmap.peek(self.reg_pc + 2);
 				
 				self.ins_cycles = 0;
@@ -165,7 +165,7 @@ impl GbCpu {
 				self.reg_pc = self.reg_pc + 2;
 				println!("LD C, 0x{0:02X}", self.reg_h);
 			}
-			0x21 => {
+			0x21 => { //LD HL, d16
 				self.reg_h = mmap.peek(self.reg_pc + 2);
 				self.reg_l = mmap.peek(self.reg_pc + 1);
 				
@@ -174,7 +174,7 @@ impl GbCpu {
 				self.reg_pc = self.reg_pc + 3;
 				println!("LD HL, 0x{0:02X}{1:02X}", self.reg_h, self.reg_l);
 			}
-			0x32 => {
+			0x32 => { //LDD HL, A // NOT FUNCTIONAL - Need to decrement HL
 				let address = ((self.reg_h as u16)<< 8 ) + (self.reg_l as u16);
 				mmap.poke(address, self.reg_a);
 
@@ -182,8 +182,10 @@ impl GbCpu {
 				self.ins_max_cycles = 4;
 				self.reg_pc = self.reg_pc + 1;
 				println!("LD (HL), A : (0x{0:04X}) <- 0x{1:02X}", address, self.reg_a);
+
+				//Decrement HL here
 			}
-			0xC3 => {
+			0xC3 => { //JP a16
 				let new_address_high = mmap.peek(self.reg_pc + 2) as u16;
 				let new_address_low = mmap.peek(self.reg_pc + 1) as u16;
 				let new_address = ( new_address_high << 8 ) + new_address_low;
@@ -194,7 +196,7 @@ impl GbCpu {
 				self.reg_pc = new_address;
 				println!("JP 0x{0:04X}", new_address);
 			}
-			0xAF => {
+			0xAF => { //XOR A
 				self.reg_a = 0;
 				self.reg_f = self.reg_f & 0x7F;
 
