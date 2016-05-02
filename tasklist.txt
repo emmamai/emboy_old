@@ -1,0 +1,23 @@
+Current Task List
+=====================
+
+
+---------------------
+GUI
+---------------------
+Implement reset feature in GUI
+Implement run feature in GUI
+Implement stop feature in GUI
+Grey out run when running, and stop when stopped
+Add a proper menu system
+
+----------------------
+Debug
+----------------------
+Add breaks and breakpoints
+
+----------------------
+CPU
+----------------------
+Continue implementing instructions
+Implement interrupts
