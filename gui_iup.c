@@ -23,6 +23,8 @@ char *hl_str;
 char *sp_str;
 char *pc_str;
 
+int is_running = 0;
+
 void UpdateDbgWindowRegValues( cpuState_t* cpu ) {
 	sprintf( af_str, "0x%04x", *cpu->af );
 	sprintf( bc_str, "0x%04x", *cpu->bc );
@@ -39,9 +41,25 @@ void UpdateDbgWindowRegValues( cpuState_t* cpu ) {
 	IupSetAttribute( dbg_txt_pc, "VALUE", pc_str );
 }
 
+void OnBreak( void ) {
+	printf( "BREAK\n" );
+	is_running = 0;
+}
+
+void Run( void ) {
+	is_running = 1;
+}
+
 void Step( void ) {
-	while( CPU_RunClockCycle( cpu, mmap ) < 1 );
+	while( RunClockCycle( cpu, mmap ) < 1 );
 	UpdateDbgWindowRegValues( cpu );
+}
+
+int Idle( void ) {
+	if ( is_running > 0 ) {
+		RunClockCycle( cpu, mmap );
+	}
+	return IUP_DEFAULT;
 }
 
 void CreateDbgWindow() {
@@ -52,7 +70,9 @@ void CreateDbgWindow() {
 	dbg_buttons = IupVbox( dbg_btn_run, dbg_btn_step, dbg_btn_break, NULL );
 
 	// dbg_reglist = Iup
+	IupSetCallback( dbg_btn_run, "ACTION", (Icallback)Run );
 	IupSetCallback( dbg_btn_step, "ACTION", (Icallback)Step );
+	IupSetCallback( dbg_btn_break, "ACTION", (Icallback)OnBreak );
 
 	IupSetAttribute( dbg_btn_run, "SIZE", "50x20" );
 	IupSetAttribute( dbg_btn_step, "SIZE", "50x20" );
@@ -103,7 +123,7 @@ void CreateDbgWindow() {
 	IupShowXY( dbg_wnd, IUP_CENTER, IUP_CENTER );
 }
 
-int GUI_Init( int *argc, char **argv ) {
+int GUI_Init( int *argc, char ***argv ) {
 	int r = IupOpen( argc, argv );
 
 	switch( r ) {
@@ -129,8 +149,8 @@ int GUI_Init( int *argc, char **argv ) {
 	return 0;
 }
 
-int GUI_MainLoop( cpuState_t* cpu, mmapState_t* mmap ) {
-
+void GUI_MainLoop( cpuState_t* cpu, mmapState_t* mmap ) {
+	IupSetFunction( "IDLE_ACTION", (Icallback)Idle );
 	IupMainLoop();
 }
 

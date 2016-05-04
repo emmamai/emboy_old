@@ -8,7 +8,7 @@ my normal convention is very hard to read with opcode-based
 function names.
 */
 void no_opcode( cpuState_t* cpu, mmapState_t* mmap ) {
-
+	OnBreak();
 }
 
 char * no_op_display( cpuState_t* cpu, mmapState_t* mmap ) {

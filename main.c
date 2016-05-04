@@ -19,6 +19,10 @@ void SetStatupState( cpuState_t *cpu ) {
 	*cpu->pc = 0x100;
 }
 
+int RunClockCycle( cpuState_t* cpu, mmapState_t* mmap ) {
+	return CPU_RunClockCycle( cpu, mmap );
+}
+
 int main( int argc, char **argv ) {
 	if ( argc < 2 ) {
 		printf( "Usage: %s filename\n", argv[0] );
