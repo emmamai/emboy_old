@@ -20,6 +20,7 @@ void SetStatupState( cpuState_t *cpu ) {
 }
 
 int RunClockCycle( cpuState_t* cpu, mmapState_t* mmap ) {
+	LCD_RunClockCycle( mmap );
 	return CPU_RunClockCycle( cpu, mmap );
 }
 
@@ -41,9 +42,9 @@ int main( int argc, char **argv ) {
 	mmap = Mmap_Init();
 	mmap->cart = cart;
 
+	LCD_Init( mmap );
 
 	GUI_Init( &argc, &argv );
-
 
 	GUI_MainLoop( cpu, mmap );
 

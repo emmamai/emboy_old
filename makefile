@@ -1,5 +1,5 @@
 LIBS= -liup
-OBJS= main.o cartridge.o cpu.o memmap.o opcodes.o gui_iup.o
+OBJS= main.o cartridge.o cpu.o memmap.o opcodes.o gui_iup.o lcd.o
 DEFINES=
 CFLAGS= -ggdb -Wall -O0
 CC= gcc

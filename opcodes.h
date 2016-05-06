@@ -16,6 +16,7 @@ void no_opcode( cpuState_t *cpu, mmapState_t *mmap );
 char* no_op_display( cpuState_t *cpu, mmapState_t *mmap );
 
 void op_nop( cpuState_t* cpu, mmapState_t* mmap );			// 0x00 NOP
+void op_ld_bc_d16( cpuState_t* cpu, mmapState_t* mmap );	// 0x01 LD BC, d16
 void op_dec_b( cpuState_t* cpu, mmapState_t* mmap );		// 0x05 DEC B
 void op_ld_b_d8( cpuState_t* cpu, mmapState_t* mmap );		// 0x06 LD B, d8
 void op_inc_c( cpuState_t* cpu, mmapState_t* mmap );		// 0x0C INC C

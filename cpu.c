@@ -6,6 +6,7 @@
 #include "cpu.h"
 #include "opcodes.h"
 
+
 cpuState_t * CPU_Init() {
 	cpuState_t * cpu = malloc( sizeof( cpuState_t ) );
 
@@ -164,7 +165,8 @@ void CPU_UpdateCFlag_Add( cpuState_t *cpu, unsigned char dest, unsigned char ope
 }
 
 void CPU_PushByte( cpuState_t* cpu, mmapState_t* mmap, unsigned char value ) {
-	Mmap_Poke( mmap, *cpu->sp--, value );
+	Mmap_Poke( mmap, *cpu->sp, value );
+	*cpu->sp = *cpu->sp - 1;
 }
 
 void CPU_PushWord( cpuState_t* cpu, mmapState_t* mmap, unsigned short value ) {

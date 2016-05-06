@@ -1,6 +1,7 @@
 #include "cartridge.h"
 #include "memmap.h"
 #include "cpu.h"
+#include "gui.h"
 
 /*
 This file breaks normal function naming conventions, as
@@ -19,6 +20,16 @@ char * no_op_display( cpuState_t* cpu, mmapState_t* mmap ) {
 void op_nop( cpuState_t* cpu, mmapState_t* mmap ) {
 	*cpu->pc = *cpu->pc + 1;
 	*cpu->cycles_until_next_instruction = 4;
+}
+
+
+// 0x01 LD BC, 16
+void op_ld_bc_d16( cpuState_t* cpu, mmapState_t* mmap ) {
+	*cpu->b = Mmap_Peek( mmap, *cpu->pc + 2 );
+	*cpu->c = Mmap_Peek( mmap, *cpu->pc + 1 );
+
+	*cpu->pc = *cpu->pc + 3;
+	*cpu->cycles_until_next_instruction = 12;
 }
 
 //0x05 DEC B
