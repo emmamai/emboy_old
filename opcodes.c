@@ -51,6 +51,17 @@ void op_ld_b_d8( cpuState_t* cpu, mmapState_t* mmap ) {
 	*cpu->cycles_until_next_instruction = 8;
 }
 
+//0x0B DEC BC
+void op_dec_bc( cpuState_t* cpu, mmapState_t* mmap ) {
+	CPU_UpdateHFlag_Subtract( cpu, *cpu->b, 1 );
+	*cpu->bc = *cpu->bc - 1;
+	CPU_UpdateZFlag( cpu, *cpu->bc );
+	CPU_SetNFlag( cpu );
+
+	*cpu->pc = *cpu->pc + 1;
+	*cpu->cycles_until_next_instruction = 4;
+}
+
 // 0x0C INC C
 void op_inc_c( cpuState_t* cpu, mmapState_t* mmap ) {
 	CPU_UpdateHFlag_Add( cpu, *cpu->c, 1 );
@@ -168,10 +179,28 @@ void op_ld_hl_a( cpuState_t* cpu, mmapState_t* mmap ) {
 	*cpu->cycles_until_next_instruction = 8;
 }
 
+// 0x78 LD A, B
+void op_ld_a_b( cpuState_t* cpu, mmapState_t* mmap ) {
+	*cpu->a = cpu->b;
+
+	*cpu->pc = *cpu->pc + 1;
+	*cpu->cycles_until_next_instruction = 4;
+}
+
 // 0xAF XOR A
 void op_xor_a( cpuState_t* cpu, mmapState_t* mmap ) {
 	*cpu->a = 0;
 	*cpu->f = 0x80;
+
+	*cpu->pc = *cpu->pc + 1;
+	*cpu->cycles_until_next_instruction = 4;
+}
+
+// 0xB1 OR C
+void op_or_c( cpuState_t* cpu, mmapState_t* mmap ) {
+	*cpu->a = *cpu->a | *cpu->c;
+	*cpu->f = 0x00;
+	CPU_UpdateZFlag( cpu, *cpu->a );
 
 	*cpu->pc = *cpu->pc + 1;
 	*cpu->cycles_until_next_instruction = 4;
