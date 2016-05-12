@@ -50,7 +50,7 @@ unsigned char Mmap_PeekConst( const mmapState_t* mmap, unsigned short addr ) {
 		printf( "[MEM] Read from invalid memory region 0xFF00-0xFF7F\n" );
 		return 0;
 	} else if ( addr == 0xFF44 ) {
-		printf( "[MEM] Read from LY Register (LY:%i, count:%i)\n", mmap->reg_ly, lcd_mode_cycle_count );
+		printf( "[MEM] Read from LY Register (LY:%u, count:%u)\n", mmap->reg_ly, lcd_mode_cycle_count );
 		return mmap->reg_ly;
 	} else if ( addr < 0xFF80 ) { //IO ports
 		printf( "[MEM] Read from I/O port address %4x - not implemented\n", addr );
